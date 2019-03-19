@@ -1,13 +1,15 @@
+#!/usr/bin/env sh
+
 DEVICE_COUNT=`adb devices | grep -E "device$" | wc -l`
 if [ $DEVICE_COUNT == 1 ] ; then
 	adb shell settings put system show_touches 1
 	adb shell screenrecord /sdcard/screenshot.mp4 &
 	PID=$!
-	read -n 1 -s -r -p "点任意按键停止录屏"
+	read -n 1 -s -r -p "点击任意按键停止录屏"
 	kill $PID
 	wait $PID 2>/dev/null
 	adb shell settings put system show_touches 0
-	adb pull /sdcard/screenshot.mp4 ~/Desktop/录屏-`adb shell settings get global device_name`-`date +"%Y-%m-%d_%H%M%S"`.mp4
+	adb pull /sdcard/screenshot.mp4 ~/Desktop/`adb shell settings get global device_name | sed 's/ /_/g'`-`date +"%Y-%m-%d_%H%M%S"`.mp4
 	adb shell rm /sdcard/screenshot.mp4
 else 
 	echo 没有插入Android手机或未打开“开发者调试开关”

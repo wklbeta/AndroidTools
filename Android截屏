@@ -1,7 +1,9 @@
+#!/usr/bin/env sh
+
 DEVICE_COUNT=`adb devices | grep -E "device$" | wc -l`
 if [ $DEVICE_COUNT == 1 ] ; then
 	adb shell screencap -p /sdcard/screencap.png
-	adb pull /sdcard/screencap.png ~/Desktop/截屏-`adb shell settings get global device_name`-`date +"%Y-%m-%d_%H%M%S"`.png
+	adb pull /sdcard/screencap.png ~/Desktop/截屏-`adb shell settings get global device_name | sed 's/ /_/g'`-`date +"%Y-%m-%d_%H%M%S"`.png
 	adb shell rm /sdcard/screencap.png
 else 
 	echo 没有插入Android手机或未打开“开发者调试开关”
